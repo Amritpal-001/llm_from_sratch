@@ -18,7 +18,10 @@ class GPT(nn.Module):
         self.token_embedding = nn.Embedding(config.vocab_size, config.d_model)
         self.positional_encoding = SinusoidalPositionalEncoding(config.d_model, config.max_seq_len)
         self.blocks = nn.ModuleList(
-            [TransformerBlock(config.d_model, config.num_heads, config.d_ff) for _ in range(config.num_layers)]
+            [
+                TransformerBlock(config.d_model, config.num_heads, config.d_ff, attention_type=config.attention_type)
+                for _ in range(config.num_layers)
+            ]
         )
         self.ln_final = LayerNorm(config.d_model)
         self.lm_head = Linear(config.d_model, config.vocab_size, bias=False)

@@ -11,27 +11,56 @@ Every module is grounded in the papers under [context/](context/) — see [docs/
 Install `uv`, create the virtual environment, then install torch and this package into it:
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh   # skip if uv is already installed
+# curl -LsSf https://astral.sh/uv/install.sh | sh   # skip if uv is already installed
+cd /storage/home/hcoda1/1/asingh3450/r-amadabhushi9-ext_em/code/explore/llm_from_sratch
 uv venv .venv
 uv pip install --python .venv/bin/python torch
 uv pip install --python .venv/bin/python -e .
 ```
 
+Activate the env:
+
+```bash
+cd /storage/home/hcoda1/1/asingh3450/r-amadabhushi9-ext_em/code/explore/llm_from_sratch
+source .venv/bin/activate
+```
+
+
+## Results
+#### Compare different attention types
+![Compare different attention types](docs/loss_comparison.png)
+
+
+#### Time comparison table
+
+Wall-clock training time (5000 steps), by dataset and attention type:
+
+| Dataset | dot_product | scaled_dot_product | additive |
+|---|---|---|---|
+| tinyshakespeare | TBD | TBD | TBD |
+| ecoli | TBD | TBD | TBD |
+| swissprot | TBD | TBD | TBD |
+| human Mito | TBD | TBD | TBD |
+| human Chr21 | TBD | TBD | TBD |
+
 ## Running the pipeline
 
-Use `./run.sh <script>.py` for everything — it wraps the container invocation and fixes an SSL cert path issue that otherwise breaks HTTPS downloads inside the container.
-
-1. **Prepare data** — downloads TinyShakespeare, builds the vocab, writes `data/*.pt`:
+1. **Prepare data** — downloads a corpus, builds the vocab, writes `data/<dataset>/*.pt`:
    ```bash
-   ./run.sh 101_prepare_data.py
+   python 101_prepare_data.py --dataset tinyshakespeare  # default
+   python 101_prepare_data.py --dataset ecoli            # E. coli genome (DNA)
+   python 101_prepare_data.py --dataset swissprot        # Swiss-Prot (protein)
+   python 101_prepare_data.py --dataset human_mito       # human mitochondrial genome (DNA)
+   python 101_prepare_data.py --dataset human_chr21      # human chromosome 21 (DNA)
    ```
+   `102_train_model.py` / `103_generate_text.py` read the dataset via their `DATASET` constant at the top of each file — set it to match.
 2. **Verify components** — numeric parity checks of each hand-implemented module against PyTorch's own built-ins:
    ```bash
-   ./run.sh 201_verify_attention.py      # ...through 209_verify_mla.py
+   python 201_verify_attention.py      # ...through 209_verify_mla.py
    ```
 3. **Train** — trains the GPT model, writes `checkpoints/gpt.pt`:
    ```bash
-   ./run.sh 102_train_model.py
+   python 102_train_model.py
    ```
    For a real (longer) run on a GPU node, submit it as a batch job instead of running interactively:
    ```bash
@@ -39,7 +68,7 @@ Use `./run.sh <script>.py` for everything — it wraps the container invocation 
    ```
 4. **Generate** — loads the checkpoint and samples text:
    ```bash
-   ./run.sh 103_generate_text.py
+   python 103_generate_text.py
    ```
 
 ## Repo layout
@@ -58,6 +87,11 @@ Use `./run.sh <script>.py` for everything — it wraps the container invocation 
 "Paper A" = Serret 2026, arXiv:2604.00965v1, *Understanding Transformers and Attention Mechanisms: An Introduction for Applied Mathematicians*.
 
 "Paper B" = Soydaner 2022, *Neural Computing and Applications*, *Attention Mechanism in Neural Networks: Where It Comes and Where It Goes* — background/history only, not a source for any implementation below.
+
+"Paper C" = Vaswani 2023, *Attention Is All You Need*
+/storage/home/hcoda1/1/asingh3450/r-amadabhushi9-ext_em/code/explore/llm_from_sratch/context/P3_2023 - Attention Is All You Need.pdf
+
+
 
 | Module | Paper section | Concept implemented |
 |---|---|---|

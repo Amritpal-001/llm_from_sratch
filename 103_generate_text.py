@@ -8,7 +8,8 @@ from llm_from_scratch.nn.gpt import GPT
 from llm_from_scratch.training.generate import generate
 from llm_from_scratch.utils.device import get_device
 
-DATA_DIR = Path("data")
+DATASET = "tinyshakespeare"  # tinyshakespeare | ecoli | swissprot | human_mito | human_chr21
+DATA_DIR = Path("data") / DATASET
 CHECKPOINT_PATH = Path("checkpoints2/gpt.pt")
 MAX_NEW_TOKENS = 500
 TEMPERATURE = 0.8

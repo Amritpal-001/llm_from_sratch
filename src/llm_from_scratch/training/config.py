@@ -9,6 +9,7 @@ class GPTConfig:
     num_layers: int = 4
     d_ff: int = 512
     max_seq_len: int = 256
+    attention_type: str = "scaled_dot_product"  # "scaled_dot_product" | "additive" | "dot_product"
 
 
 @dataclass
@@ -16,6 +17,6 @@ class TrainConfig:
     batch_size: int = 64
     block_size: int = 256
     learning_rate: float = 3e-4
-    max_steps: int = 500
-    eval_interval: int = 50
-    eval_steps: int = 50
+    max_steps: int = 5000
+    eval_interval: int = 100
+    eval_steps: int = 100

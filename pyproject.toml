@@ -1,0 +1,25 @@
+[project]
+name = "llm-from-scratch"
+version = "0.1.0"
+description = "From-scratch attention, transformer, and GPT implementation."
+requires-python = ">=3.10"
+dependencies = [
+    "torch",
+    "numpy",
+    "matplotlib",
+]
+
+[build-system]
+requires = ["uv_build>=0.11,<0.12"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+# PyPI's default torch wheel is built for CUDA 13.0, which is newer than the
+# cluster's GPU node driver (max supported CUDA 12.9) -> torch.cuda.is_available()
+# was silently False. Pin to a cu129 wheel that the driver can actually run.
+torch = [{ index = "pytorch-cu129" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu129"
+url = "https://download.pytorch.org/whl/cu129"
+explicit = true
